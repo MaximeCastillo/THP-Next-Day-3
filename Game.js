@@ -27,14 +27,54 @@ class Game {
     let charactersIndex = [0, 1, 2, 3, 4];
     while (charactersIndex.length > 0) {
       let playerIndex = this.randomIndex(charactersIndex);
-      console.log(`${this.characters[playerIndex].name} joue son tour... "C'est parti les p'tits potes, on fou l'bordel !"...`);
+      if (this.characters[playerIndex].status == "playing") {
+        console.log(`C'est à ${this.characters[playerIndex].name} de jouer`);
+        let attackType = this.askAttackType();
+        if (attackType == "n") {
+          console.log("Attaque normale");
+        }
+        else if (attackType == "s") {
+          console.log("Attaque spéciale");
+       }
+        else {
+          console.log("Mauvaise réponse");
+        }
+      }
       charactersIndex = charactersIndex.filter(characterIndex => characterIndex !== playerIndex);
     }
-    this.skipTurn();
+  }
+
+  start = () => {
+    console.log(this.characters);
+    let playingCharacters = this.characters.filter(character => character.status == "playing");
+    while (this.turnLeft > 0 && playingCharacters.length > 1) {
+      this.startTurn();
+      let playingCharacters = this.characters.filter(character => character.status == "playing");
+      console.log(`Les personnages encore en vie sont :`)
+      playingCharacters.forEach(character => console.log(`${character.name} avec ${character.hp} points de vie`));
+      this.skipTurn();
+    }
+    this.endGame();
+  }
+
+  askAttackType = () => {
+    return prompt('Attaque normale (tapez "n") OU attaque spéciale (tapez "s") ?');
   }
 
   endGame = () => {
     // Fin du jeu, mettre les joueurs aux status "winner"
+    // this.characters = this.characters.map(character => {
+    //   if (character.status == "playing") {
+    //     character.status = "winner";
+    //   }
+    // });
+    // let winners = this.characters.filter(character => character.status == "winner");
+    console.log(`Bravo aux gagnants : ...`)
+    //winners.forEach(character => console.log(`${character.name} avec ${character.hp} points de vie`));
     console.log("Le jeu est fini.");
+  }
+
+  watchStats = () => {
+    // Afficher les personnages vivants ainsi que leurs caractéristiques.
   }
 }
